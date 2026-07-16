@@ -1,0 +1,28 @@
+[project]
+name = "cs-classifier"
+version = "0.1.0"
+description = "Reproducible Korean customer-service text-classification lab"
+readme = "README.md"
+requires-python = ">=3.11,<3.12"
+dependencies = [
+  "datasets>=3.0,<4.0",
+  "numpy>=1.26,<3.0",
+  "pyyaml>=6.0,<7.0",
+  "scikit-learn>=1.5,<2.0",
+  "torch>=2.5,<3.0",
+  "transformers>=4.46,<5.0",
+]
+
+[dependency-groups]
+dev = ["pytest>=8.0,<9.0"]
+
+[build-system]
+requires = ["hatchling>=1.25"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/cs_classifier"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["src"]

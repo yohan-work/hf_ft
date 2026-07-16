@@ -1,0 +1,12 @@
+seed: 42
+model:
+  id: klue/roberta-base
+  revision: main
+  max_length: 128
+split:
+  train: 0.70
+  validation: 0.15
+  test: 0.15
+data:
+  raw_path: data/raw/synthetic_cs_v1.csv
+  processed_dir: data/processed
