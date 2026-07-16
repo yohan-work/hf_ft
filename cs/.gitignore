@@ -15,6 +15,9 @@ models/*
 !models/.gitkeep
 artifacts/checkpoints/
 artifacts/runs/
+artifacts/metrics/
+artifacts/figures/
+artifacts/models/
 *.safetensors
 *.bin
 
