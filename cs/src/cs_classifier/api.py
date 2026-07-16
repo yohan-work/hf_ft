@@ -3,19 +3,24 @@
 from __future__ import annotations
 
 import os
+import json
 from contextlib import asynccontextmanager
 from pathlib import Path
 from typing import Callable
 
-from fastapi import FastAPI, Request
+from fastapi import FastAPI, HTTPException, Request
 from fastapi.encoders import jsonable_encoder
 from fastapi.exceptions import RequestValidationError
 from fastapi.responses import JSONResponse
+from fastapi.responses import FileResponse
+from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel, Field, field_validator
 
 from .inference import ClassifierPredictor, PredictionResult
 
 MAX_TEXT_CHARS = 1000
+PROJECT_ROOT = Path(__file__).resolve().parents[2]
+STATIC_DIR = Path(__file__).resolve().parent / "static"
 
 
 class PredictRequest(BaseModel):
@@ -58,6 +63,7 @@ def create_app(predictor_factory: Callable[[], ClassifierPredictor] = default_pr
         yield
 
     app = FastAPI(title="Korean CS Classifier API", version="0.1.0", lifespan=lifespan)
+    app.mount("/static", StaticFiles(directory=STATIC_DIR), name="static")
 
     @app.exception_handler(RequestValidationError)
     async def validation_error(_: Request, exc: RequestValidationError) -> JSONResponse:
@@ -72,6 +78,17 @@ def create_app(predictor_factory: Callable[[], ClassifierPredictor] = default_pr
     def health(request: Request) -> dict[str, str]:
         predictor = request.app.state.predictor
         return {"status": "ok", "model_version": os.getenv("CS_MODEL_VERSION", "v1"), "device": str(predictor.device)}
+
+    @app.get("/lab/metrics")
+    def lab_metrics() -> dict:
+        metrics_path = PROJECT_ROOT / "artifacts/metrics/final-test-metrics.json"
+        if not metrics_path.exists():
+            raise HTTPException(status_code=404, detail="Final evaluation artifacts are not available")
+        return json.loads(metrics_path.read_text(encoding="utf-8"))
+
+    @app.get("/", include_in_schema=False)
+    def model_lab() -> FileResponse:
+        return FileResponse(STATIC_DIR / "index.html")
 
     @app.post("/predict", response_model=PredictResponse)
     def predict(payload: PredictRequest, request: Request) -> PredictResponse:

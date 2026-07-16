@@ -19,7 +19,8 @@ Phase 7까지 완료했습니다.
 | Transformer 파인튜닝 | 완료 | `klue/roberta-base` Validation Macro F1 0.664 |
 | 최종 Test 평가·오분류 분석 | 완료 | Transformer Test Macro F1 0.664, baseline 대비 +0.232 |
 | 로컬 추론 API | 완료 | CLI 예측, FastAPI `/predict`, `/health` |
-| Model Lab·Hub 업로드 | 예정 | 별도 Phase에서 진행 |
+| Model Lab | 완료 | 예측·확률·지표·Confusion Matrix·오분류 조회 |
+| Hub 업로드 | 예정 | 별도 Phase에서 진행 |
 
 현재 결과는 **인공 소규모 데이터**의 Validation 결과입니다. 실제 고객 문의 일반화 성능이나 운영
 품질을 뜻하지 않습니다.
@@ -68,6 +69,8 @@ uv run uvicorn cs_classifier.api:app --host 127.0.0.1 --port 8000
 
 자세한 요청·응답 예시는 [API 문서](cs/docs/api.md)를 참고합니다.
 
+같은 서버의 `http://127.0.0.1:8000`을 브라우저에서 열면 Model Lab을 사용할 수 있습니다.
+
 Hugging Face 모델 파일과 학습 산출물은 로컬 캐시·`models/`·`artifacts/`에 생성되며 Git에 포함하지
 않습니다.
 
@@ -98,6 +101,7 @@ Hugging Face 모델 파일과 학습 산출물은 로컬 캐시·`models/`·`art
 - [최종 Test 평가](cs/docs/evaluation-report.md)
 - [오분류 분석](cs/docs/error-analysis.md)
 - [로컬 추론 API](cs/docs/api.md)
+- [Model Lab](cs/docs/model-lab.md)
 
 ## 주의사항
 

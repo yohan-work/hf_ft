@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>CS Model Lab</title>
+    <link rel="stylesheet" href="/static/lab.css" />
+  </head>
+  <body>
+    <header class="topbar">
+      <div class="topbar-inner">
+        <a class="brand" href="/">CS Model Lab</a>
+        <nav aria-label="Model Lab sections"><a href="#inference">Inference</a><a href="#evaluation">Evaluation</a><a href="#errors">Errors</a></nav>
+        <div class="live-status"><i></i><span id="health-status">Loading model</span></div>
+      </div>
+    </header>
+
+    <main class="container">
+      <section class="page-heading">
+        <div>
+          <p class="breadcrumb">Model Lab <span>/</span> Overview</p>
+          <h1>한국어 CS 분류 모델</h1>
+          <p class="subtitle">입력 문장을 분류하고, 고정 Test 기준의 성능과 오류를 확인합니다.</p>
+        </div>
+        <dl class="runtime-meta"><div><dt>VERSION</dt><dd id="model-version">v1</dd></div><div><dt>DEVICE</dt><dd id="device-name">—</dd></div></dl>
+      </section>
+
+      <section id="inference" class="workspace">
+        <article class="panel compose-panel">
+          <div class="panel-header"><div><p class="eyebrow">INFERENCE</p><h2>문의 분류</h2></div><span class="endpoint-badge">POST /predict</span></div>
+          <p class="panel-description">고객 문의를 입력하면 7개 분류 라벨의 확률을 반환합니다.</p>
+          <form id="predict-form">
+            <label for="inquiry">문의 내용</label>
+            <textarea id="inquiry" maxlength="1000" placeholder="예: 결제는 완료됐는데 주문 내역이 보이지 않아요.">결제는 완료됐는데 주문 내역이 보이지 않아요.</textarea>
+            <div class="form-footer"><span id="char-count">0 / 1000</span><button id="predict-button" type="submit"><span>분류하기</span></button></div>
+          </form>
+          <p id="predict-error" class="error-message" aria-live="polite"></p>
+        </article>
+
+        <article class="panel result-panel" aria-live="polite">
+          <div class="panel-header"><div><p class="eyebrow">PREDICTION</p><h2>예측 결과</h2></div><span id="result-state" class="state-badge">READY</span></div>
+          <div class="primary-result"><div><p id="result-label-name">—</p><span id="result-label-code">입력 대기 중</span></div><div class="confidence"><span>CONFIDENCE</span><strong id="result-confidence">—</strong></div></div>
+          <div class="divider"></div>
+          <div id="score-list" class="score-list"><p class="empty-state">분류를 실행하면 모든 라벨 점수가 표시됩니다.</p></div>
+          <p class="helper-text">Confidence가 낮으면 자동 확정하지 않고 사람 검토 대상으로 처리해야 합니다.</p>
+        </article>
+      </section>
+
+      <section id="evaluation" class="section-block">
+        <div class="section-title"><div><p class="eyebrow">FIXED TEST SET · 21 INQUIRIES</p><h2>평가 결과</h2></div><p>Test 데이터는 모델 선택 후 한 번만 평가했습니다.</p></div>
+        <div id="metric-cards" class="metric-cards"></div>
+      </section>
+
+      <section class="analytics-grid">
+        <article class="panel matrix-panel">
+          <div class="panel-header"><div><p class="eyebrow">CONFUSION MATRIX</p><h2>Transformer 분류 결과</h2></div><span class="legend">행: 실제 · 열: 예측</span></div>
+          <div id="matrix-wrap" class="matrix-wrap"></div>
+        </article>
+        <article class="panel class-panel">
+          <div class="panel-header"><div><p class="eyebrow">CLASS METRICS</p><h2>카테고리별 F1</h2></div></div>
+          <div id="class-metrics" class="class-metrics"></div>
+        </article>
+      </section>
+
+      <section id="errors" class="section-block error-section">
+        <div class="section-title"><div><p class="eyebrow">ERROR ANALYSIS</p><h2>오분류 사례</h2></div><span id="error-count" class="error-count">—</span></div>
+        <div id="error-list" class="error-list"></div>
+      </section>
+    </main>
+    <script src="/static/lab.js"></script>
+  </body>
+</html>
