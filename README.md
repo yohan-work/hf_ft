@@ -1,5 +1,9 @@
 # Hugging Face 한국어 CS 파인튜닝 실습
 
+## v1 matrix data
+<img width="1118" height="916" alt="스크린샷 2026-07-16 오후 3 45 42" src="https://github.com/user-attachments/assets/60d00917-6688-4885-a48e-d2d84fe12b54" />
+
+
 한국어 고객 문의를 7개 카테고리로 분류하는 모델을 직접 만들며, Hugging Face의 데이터 처리·
 파인튜닝·평가 흐름을 익히는 학습 프로젝트입니다.
 
