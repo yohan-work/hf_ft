@@ -41,11 +41,11 @@ def load_rows(path: Path, valid_labels: set[str]) -> list[dict[str, str]]:
     if len(ids) != len(set(ids)):
         raise ValueError("duplicate ids detected")
     for row in rows:
+        if any(not row[column] or not row[column].strip() for column in REQUIRED_COLUMNS):
+            raise ValueError(f"blank or missing required field in row: {row}")
         row["text"] = normalize_text(row["text"])
         if row["label"] not in valid_labels:
             raise ValueError(f"unknown label: {row['label']}")
-        if any(not row[column].strip() for column in REQUIRED_COLUMNS):
-            raise ValueError(f"blank required field in {row['id']}")
     return rows
 
 
@@ -78,23 +78,25 @@ def _character_bigrams(text: str) -> set[str]:
 
 
 def leakage_report(splits: dict[str, list[dict[str, str]]], similarity_threshold: float = 0.60) -> dict[str, Any]:
-    all_rows = [(split, row) for split, rows in splits.items() for row in rows]
-    canonical_rows = [(split, row, canonical_for_duplicate_check(row["text"])) for split, row in all_rows]
+    canonical_splits = {
+        split: [(row, canonical_for_duplicate_check(row["text"])) for row in rows]
+        for split, rows in splits.items()
+    }
     exact_cross_split: list[dict[str, str]] = []
     similarity_cross_split: list[dict[str, Any]] = []
-    for (left_split, left, left_text), (right_split, right, right_text) in combinations(canonical_rows, 2):
-        if left_split == right_split:
-            continue
-        if left_text == right_text:
-            exact_cross_split.append({"left_id": left["id"], "right_id": right["id"]})
-            continue
-        left_bigrams, right_bigrams = _character_bigrams(left["text"]), _character_bigrams(right["text"])
-        union = left_bigrams | right_bigrams
-        score = len(left_bigrams & right_bigrams) / len(union) if union else 0.0
-        if score >= similarity_threshold:
-            similarity_cross_split.append(
-                {"left_id": left["id"], "right_id": right["id"], "score": round(score, 4)}
-            )
+    for split_a, split_b in combinations(splits.keys(), 2):
+        for left, left_text in canonical_splits[split_a]:
+            for right, right_text in canonical_splits[split_b]:
+                if left_text == right_text:
+                    exact_cross_split.append({"left_id": left["id"], "right_id": right["id"]})
+                    continue
+                left_bigrams, right_bigrams = _character_bigrams(left["text"]), _character_bigrams(right["text"])
+                union = left_bigrams | right_bigrams
+                score = len(left_bigrams & right_bigrams) / len(union) if union else 0.0
+                if score >= similarity_threshold:
+                    similarity_cross_split.append(
+                        {"left_id": left["id"], "right_id": right["id"], "score": round(score, 4)}
+                    )
     return {
         "similarity_method": "character_bigram_jaccard",
         "similarity_threshold": similarity_threshold,

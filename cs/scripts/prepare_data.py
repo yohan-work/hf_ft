@@ -39,8 +39,8 @@ def main() -> None:
     label_to_id = {label: index for index, label in enumerate(label_order)}
     dataset = DatasetDict(
         {
-            name: Dataset.from_list([{**row, "label_id": label_to_id[row["label"]]} for row in split_rows])
-            for name, split_rows in splits.items()
+            name: Dataset.from_list([{**row, "label_id": label_to_id[row["label"]]} for row in rows_in_split])
+            for name, rows_in_split in splits.items()
         }
     )
     tokenizer = AutoTokenizer.from_pretrained(train_config["model"]["id"], revision=train_config["model"]["revision"])
