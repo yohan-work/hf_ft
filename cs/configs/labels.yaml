@@ -1,0 +1,40 @@
+version: 1
+task:
+  type: single_label_text_classification
+  language: ko
+  primary_intent_rule: >-
+    하나의 문의에 여러 이슈가 있으면 고객이 해결을 요구하는 주된 문제,
+    즉 후속 조치를 가장 먼저 결정하는 이슈를 하나만 선택한다.
+  unresolved_compound_rule: >-
+    주된 문제를 문장만으로 판단할 수 없는 동등한 복합 문의는 학습 데이터에서
+    제외하고 boundary_review 대상으로 기록한다.
+
+labels:
+  - id: 0
+    code: payment
+    name_ko: 결제
+    description: 결제 시도, 승인, 청구, 결제수단 또는 결제 후 주문 미생성 문제
+  - id: 1
+    code: cancellation_refund
+    name_ko: 취소·환불
+    description: 주문 또는 결제의 취소, 환불 요청, 환불 상태와 환불 금액 문제
+  - id: 2
+    code: delivery
+    name_ko: 배송
+    description: 출고, 배송 조회, 배송 지연, 수령, 배송지 변경 등 배송 과정 문제
+  - id: 3
+    code: exchange_return
+    name_ko: 교환·반품
+    description: 상품 수령 후 교환 또는 반품의 신청, 절차, 회수, 상태 문제
+  - id: 4
+    code: account
+    name_ko: 계정
+    description: 로그인, 가입, 비밀번호, 회원 정보, 탈퇴 등 계정 접근과 관리 문제
+  - id: 5
+    code: technical_issue
+    name_ko: 기술 오류
+    description: 앱·웹·주문 화면·쿠폰 적용 등 서비스 기능의 오류와 비정상 동작
+  - id: 6
+    code: product_general
+    name_ko: 상품·일반 문의
+    description: 상품 정보, 옵션, 재고, 가격, 프로모션 정책 등 거래 전후 일반 문의
