@@ -8,7 +8,7 @@
 
 ## 현재 상태
 
-Phase 6까지 완료했습니다.
+Phase 7까지 완료했습니다.
 
 | 단계 | 상태 | 결과 |
 |---|---|---|
@@ -17,7 +17,7 @@ Phase 6까지 완료했습니다.
 | 데이터 파이프라인 | 완료 | seed 42 기반 70/15/15 split, tokenizer 검증 |
 | Baseline | 완료 | TF-IDF + Logistic Regression Validation Macro F1 0.530 |
 | Transformer 파인튜닝 | 완료 | `klue/roberta-base` Validation Macro F1 0.664 |
-| 최종 Test 평가·오분류 분석 | 예정 | Test 데이터는 아직 사용하지 않음 |
+| 최종 Test 평가·오분류 분석 | 완료 | Transformer Test Macro F1 0.664, baseline 대비 +0.232 |
 | API·Model Lab·Hub 업로드 | 예정 | 별도 Phase에서 진행 |
 
 현재 결과는 **인공 소규모 데이터**의 Validation 결과입니다. 실제 고객 문의 일반화 성능이나 운영
@@ -85,6 +85,8 @@ Hugging Face 모델 파일과 학습 산출물은 로컬 캐시·`models/`·`art
 - [데이터 파이프라인 결과](cs/docs/data-pipeline-report.md)
 - [Baseline 결과](cs/docs/baseline-report.md)
 - [Transformer 학습 결과](cs/docs/training-report.md)
+- [최종 Test 평가](cs/docs/evaluation-report.md)
+- [오분류 분석](cs/docs/error-analysis.md)
 
 ## 주의사항
 
