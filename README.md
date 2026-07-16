@@ -18,7 +18,8 @@ Phase 7까지 완료했습니다.
 | Baseline | 완료 | TF-IDF + Logistic Regression Validation Macro F1 0.530 |
 | Transformer 파인튜닝 | 완료 | `klue/roberta-base` Validation Macro F1 0.664 |
 | 최종 Test 평가·오분류 분석 | 완료 | Transformer Test Macro F1 0.664, baseline 대비 +0.232 |
-| API·Model Lab·Hub 업로드 | 예정 | 별도 Phase에서 진행 |
+| 로컬 추론 API | 완료 | CLI 예측, FastAPI `/predict`, `/health` |
+| Model Lab·Hub 업로드 | 예정 | 별도 Phase에서 진행 |
 
 현재 결과는 **인공 소규모 데이터**의 Validation 결과입니다. 실제 고객 문의 일반화 성능이나 운영
 품질을 뜻하지 않습니다.
@@ -48,6 +49,7 @@ uv sync --group dev
 uv run python scripts/prepare_data.py
 uv run python scripts/train_baseline.py
 uv run python scripts/train_transformer.py
+uv run python scripts/predict.py "결제는 완료됐는데 주문 내역이 없어요."
 uv run pytest
 ```
 
@@ -57,6 +59,14 @@ uv run pytest
 2. `train_baseline.py`: 단어·문자 패턴 기반 TF-IDF 모델을 학습합니다.
 3. `train_transformer.py`: `klue/roberta-base`에 7개 CS 라벨 분류 헤드를 붙여 파인튜닝합니다.
 4. `pytest`: 전처리, 라벨 매핑, split 재현성, 평가 지표를 검증합니다.
+
+API를 실행하려면 `cd cs` 후 아래 명령을 사용합니다.
+
+```bash
+uv run uvicorn cs_classifier.api:app --host 127.0.0.1 --port 8000
+```
+
+자세한 요청·응답 예시는 [API 문서](cs/docs/api.md)를 참고합니다.
 
 Hugging Face 모델 파일과 학습 산출물은 로컬 캐시·`models/`·`artifacts/`에 생성되며 Git에 포함하지
 않습니다.
@@ -87,6 +97,7 @@ Hugging Face 모델 파일과 학습 산출물은 로컬 캐시·`models/`·`art
 - [Transformer 학습 결과](cs/docs/training-report.md)
 - [최종 Test 평가](cs/docs/evaluation-report.md)
 - [오분류 분석](cs/docs/error-analysis.md)
+- [로컬 추론 API](cs/docs/api.md)
 
 ## 주의사항
 
