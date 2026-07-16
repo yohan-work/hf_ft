@@ -3,6 +3,15 @@ model:
   id: klue/roberta-base
   revision: main
   max_length: 128
+training:
+  seed: 42
+  epochs: 3
+  learning_rate: 2.0e-5
+  train_batch_size: 8
+  eval_batch_size: 8
+  gradient_accumulation_steps: 1
+  weight_decay: 0.01
+  metric_for_best_model: macro_f1
 split:
   train: 0.70
   validation: 0.15

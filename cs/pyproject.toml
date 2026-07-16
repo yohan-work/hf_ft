@@ -5,6 +5,7 @@ description = "Reproducible Korean customer-service text-classification lab"
 readme = "README.md"
 requires-python = ">=3.11,<3.12"
 dependencies = [
+  "accelerate>=1.0,<2.0",
   "datasets>=3.0,<4.0",
   "matplotlib>=3.9,<4.0",
   "numpy>=1.26,<3.0",
