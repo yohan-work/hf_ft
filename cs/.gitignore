@@ -1,0 +1,25 @@
+.venv/
+.cache/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.coverage
+
+# Secrets and local environment
+.env
+.env.*
+!.env.example
+
+# Hugging Face and training outputs
+models/*
+!models/.gitkeep
+artifacts/checkpoints/
+artifacts/runs/
+*.safetensors
+*.bin
+
+# Never commit real customer data
+data/raw/private/
+data/interim/
+data/processed/
+!data/processed/.gitkeep
